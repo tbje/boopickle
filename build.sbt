@@ -8,8 +8,8 @@ ThisBuild / scalafmtOnCompile := true
 val commonSettings = Seq(
   organization := "io.suzaku",
   version := Version.library,
-  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0"),
-  scalaVersion in ThisBuild := "2.12.8",
+  crossScalaVersions := Seq("2.11.12", "2.12.11", "2.13.0"),
+  scalaVersion in ThisBuild := "2.12.11",
   scalacOptions := Seq(
     "-deprecation",
     "-encoding",
@@ -39,7 +39,7 @@ val commonSettings = Seq(
     if (scalaVersion.value.startsWith("2.11"))
       "com.lihaoyi" %%% "utest" % "0.6.8" % Test
     else
-      "com.lihaoyi" %%% "utest" % "0.6.9" % Test,
+      "com.lihaoyi" %%% "utest" % "0.7.4" % Test,
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided"
   )
 )
@@ -173,37 +173,37 @@ trait TuplePicklers extends PicklerHelper {
   )
 }
 
-lazy val perftests = crossProject(JSPlatform, JVMPlatform)
-  .settings(commonSettings)
-  .settings(
-    name := "perftests",
-    scalaVersion := "2.12.6",
-    scalacOptions ++= Seq("-Xstrict-inference"),
-    libraryDependencies ++= Seq(
-      "com.lihaoyi"       %%% "upickle"       % "0.5.1",
-      "com.typesafe.play" %%% "play-json"     % "2.6.9",
-      "io.circe"          %%% "circe-core"    % "0.9.2",
-      "io.circe"          %%% "circe-parser"  % "0.9.2",
-      "io.circe"          %%% "circe-generic" % "0.9.2"
-    ),
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
-  )
-  .enablePlugins(JmhPlugin)
-  .jsSettings(
-    scalaJSOptimizerOptions in (Compile, fullOptJS) ~= { _.withUseClosureCompiler(false) },
-    libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.6",
-      "com.lihaoyi"  %%% "scalatags"   % "0.6.7"
-    )
-  )
-
-lazy val perftestsJS = preventPublication(perftests.js).enablePlugins(WorkbenchPlugin).dependsOn(boopickleJS)
-
-lazy val perftestsJVM = preventPublication(perftests.jvm)
-  .settings(
-    libraryDependencies += "io.circe" %% "circe-jawn" % "0.9.2"
-  )
-  .dependsOn(boopickleJVM)
+//lazy val perftests = crossProject(JSPlatform, JVMPlatform)
+//  .settings(commonSettings)
+//  .settings(
+//    name := "perftests",
+//    scalaVersion := "2.12.6",
+//    scalacOptions ++= Seq("-Xstrict-inference"),
+//    libraryDependencies ++= Seq(
+//      "com.lihaoyi"       %%% "upickle"       % "0.5.1",
+//      "com.typesafe.play" %%% "play-json"     % "2.6.9",
+//      "io.circe"          %%% "circe-core"    % "0.9.2",
+//      "io.circe"          %%% "circe-parser"  % "0.9.2",
+//      "io.circe"          %%% "circe-generic" % "0.9.2"
+//    ),
+//    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+//  )
+//  .enablePlugins(JmhPlugin)
+//  .jsSettings(
+//    scalaJSOptimizerOptions in (Compile, fullOptJS) ~= { _.withUseClosureCompiler(false) },
+//    libraryDependencies ++= Seq(
+//      "org.scala-js" %%% "scalajs-dom" % "0.9.6",
+//      "com.lihaoyi"  %%% "scalatags"   % "0.6.7"
+//    )
+//  )
+//
+//lazy val perftestsJS = preventPublication(perftests.js)./*enablePlugins(WorkbenchPlugin).*/dependsOn(boopickleJS)
+//
+//lazy val perftestsJVM = preventPublication(perftests.jvm)
+//  .settings(
+//    libraryDependencies += "io.circe" %% "circe-jawn" % "0.9.2"
+//  )
+//  .dependsOn(boopickleJVM)
 
 lazy val booPickleRoot = preventPublication(project.in(file(".")))
   .settings(commonSettings)
